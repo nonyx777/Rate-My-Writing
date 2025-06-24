@@ -1,25 +1,33 @@
-yaml
-name: CI/CD Pipeline
+name: React CI/CD Pipeline
+
+# This triggers the workflow on pushes and pull requests to the main branch
 on:
   push:
-  branches:
-  - main
+    branches:
+      - main
   pull_request:
-  branches:
-  - main
+    branches:
+      - main
+
 jobs:
+  # Job to build and test the application
   build:
-  runs-on: ubuntu-latest
-steps:
-  - name: Checkout code
-  uses: actions/checkout@v2
--  name: Set up Node.js
-  uses: actions/setup-node@v2
-  with:
-  node-version: '14'
--  name: Install dependencies
-  run: npm install
--  name: Run tests
-  run: npm test
--  name: Build app
-  run npm run build
+    runs-on: ubuntu-latest # This specifies the OS for the job
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2 # Checks out the code from your repository
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2 # Sets up the Node.js environment
+        with:
+          node-version: "16" # Specifies the version of Node.js
+
+      - name: Install dependencies
+        run: npm install # Installs the required dependencies
+
+      - name: Run tests
+        run: npm test # Runs your tests
+
+      - name: Build the app
+        run: npm run build # Builds the React app for production
