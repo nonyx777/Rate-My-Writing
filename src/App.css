@@ -85,3 +85,38 @@ button:disabled {
     color: #333;
     text-align: center;
 }
+
+.counters {
+    margin: -0.5rem 0 1rem;
+    color: #666;
+    font-size: 0.9rem;
+    display: flex;
+    justify-content: space-between;
+    max-width: 200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.button-group {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+button.secondary {
+    background-color: #6c757d;
+}
+
+button.secondary:hover:not(:disabled) {
+    background-color: #5a6268;
+}
+
+.error-message {
+    color: #dc3545;
+    background-color: #f8d7da;
+    padding: 0.75rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+    border: 1px solid #f5c6cb;
+}
