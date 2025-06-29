@@ -120,3 +120,47 @@ button.secondary:hover:not(:disabled) {
     margin: 1rem 0;
     border: 1px solid #f5c6cb;
 }
+
+.review-box {
+    margin-top: 2.5rem;
+    padding: 1.5rem;
+    background-color: #f9f9f9;
+    border-left: 5px solid #4caf50;
+    border-radius: 10px;
+    text-align: left;
+    color: #333;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.review-box h2,
+.review-box h3 {
+    color: #2c3e50;
+    margin-top: 1.5rem;
+}
+
+.review-box ul,
+.review-box ol {
+    padding-left: 1.5rem;
+}
+
+.review-box li {
+    margin-bottom: 0.5rem;
+}
+
+.review-box strong {
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.review-box em {
+    color: #7f8c8d;
+    font-style: italic;
+}
+
+.review-box code {
+    background-color: #f0f0f0;
+    padding: 0.2rem 0.4rem;
+    border-radius: 3px;
+    font-family: monospace;
+}
