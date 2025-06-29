@@ -1,6 +1,46 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import ReactMarkdown from "react-markdown";
 import "./App.css";
+
+const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
+
+const safetySettings = [
+  {
+    category: "HARM_CATEGORY_DANGEROUS_CONTENT",
+    threshold: "BLOCK_NONE",
+  },
+];
+
+console.log(
+  "Gemini Key:",
+  import.meta.env.VITE_GEMINI_API_KEY ? "Loaded" : "Missing",
+);
+
+async function getGeminiReview(text) {
+  const model = genAI.getGenerativeModel({
+    model: "gemini-1.5-flash",
+  });
+  const prompt = `You are a writing assistant. Review the input for grammar, clarity, and style. Identify issues, give constructive suggestions and rate it from 5:
+    ${text}
+    `;
+  try {
+    const result = await model.generateContent({
+      contents: [
+        {
+          role: "user",
+          parts: [{ text: prompt }],
+        },
+      ],
+      safetySettings,
+    });
+    const response = await result.response;
+    return response.text();
+  } catch (error) {
+    console.error("Gemini Error: ", error);
+    throw error;
+  }
+}
 
 function App() {
   const [text, setText] = useState("");
@@ -36,31 +76,8 @@ function App() {
     setError(null);
 
     try {
-      const response = await axios.post(
-        "https://api.openai.com/v1/chat/completions",
-        {
-          model: "gpt-4",
-          messages: [
-            {
-              role: "system",
-              content:
-                "You are a writing assistant. Review the input for grammar, clarity, and style. Highlight issues and give constructive suggestions.",
-            },
-            {
-              role: "user",
-              content: text,
-            },
-          ],
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${process.env.REACT_APP_OPENAI_API_KEY}`,
-            "Content-Type": "application/json",
-          },
-        },
-      );
-
-      setReview(response.data.choices[0].message.content);
+      const review = await getGeminiReview(text);
+      setReview(review);
       setLastSubmitted(Date.now());
     } catch (error) {
       console.error("Error fetching review:", error);
@@ -77,9 +94,7 @@ function App() {
   };
 
   const loadExample = () => {
-    setText(`The quick brwn fox jump over the lazy dog. This sentence contain some grammatical errors and could be more engaging for the reader.
-
-For example, we could add more descriptive language and fix any mistakes to make it more compelling to read.`);
+    setText(`The quick brwn fox jump over the lazy dog.`);
   };
 
   const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
@@ -124,7 +139,7 @@ For example, we could add more descriptive language and fix any mistakes to make
       {review && (
         <div className="review-box">
           <h2>📋 Feedback</h2>
-          <p>{review}</p>
+          <ReactMarkdown>{review}</ReactMarkdown>
         </div>
       )}
     </div>
