@@ -26,8 +26,10 @@ jobs:
       - name: Install dependencies
         run: npm install # Installs the required dependencies
 
-      #- name: Run tests
-      #  run: npm test # Runs your tests
+      - name: Run tests
+        run: npm test -- --run
+        env:
+          VITE_GEMINI_API_KEY: ${{ secrets.VITE_GEMINI_API_KEY }}
 
       - name: Build the app
-        run: npm run build # Builds the React app for production
+        run: npm run build
